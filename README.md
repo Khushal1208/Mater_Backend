@@ -134,3 +134,134 @@ app.use((req, res) => {
 🎯 **Practice these 10-15 times** and you’ll be writing backend code at lightning speed! 🔥
 
 
+
+
+
+
+#usermodel.js
+
+const mongoose = require('mongoose')
+
+const mongoPort = "127.0.0.1:27017"
+const dbName = "mongopractice"
+
+mongoose.connect(`mongodb://${mongoPort}/${dbName}`)
+
+const userSchema = mongoose.Schema({
+    name: String,
+    username : String,
+    email: String
+})
+
+module.exports = mongoose.model("user",userSchema)
+
+
+
+
+
+#app.js
+
+const express = require("express");
+const userModel = require("./usermodel");
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("hey");
+});
+
+app.get("/create", async (req, res) => {
+  let createduser = await userModel.create({
+    name: "Mahak Garg",
+    username: "Mahakssss",
+    email: "khushal@gmail.com",
+  });
+  res.send(createduser);
+});
+
+app.get("/update", async (req, res) => {
+  let updateduser = await userModel.findOneAndUpdate(
+    { name: "khushal" },
+    { username: "khushal" },
+    { new: true }
+  );
+  res.send(updateduser);
+});
+
+app.get("/read", async (req, res) => {
+  let users = await userModel.find()  //READS ALL USERS
+//   let users = await userModel.find({ username: "Mahakssss" }); // it gives in array form
+  // findOne({username:'Mahakssss'}) gives you in object form
+  res.send(users);
+});
+
+app.get('/delete',async(req,res)=>{
+    let user = await userModel.findOneAndDelete({username:'Mahakssss'})
+    res.send(user)
+})
+
+app.listen(3000);
+
+
+
+
+
+### **Learnings from MongoDB, Mongoose, and Database Management**
+
+#### **1. Setting Up MongoDB Connection**
+- Used **Mongoose** to connect with MongoDB:  
+  ```js
+  mongoose.connect(`mongodb://${mongoPort}/${dbName}`)
+  ```
+- `mongoPort` is `127.0.0.1:27017`, meaning the database is running locally.
+- `dbName` is `"mongopractice"`, which is the name of the database.
+
+#### **2. Defining a Schema and Model**
+- Created a **Schema** (`userSchema`) to define the structure of user documents.
+- Used `mongoose.model("user", userSchema)` to create a model named `"user"` that maps to a MongoDB collection.
+
+#### **3. CRUD Operations Using Mongoose**
+- **Create (`.create()`)**  
+  - Inserted a new user document into MongoDB.
+  - Example:
+    ```js
+    let createduser = await userModel.create({
+        name: "Mahak Garg",
+        username: "Mahakssss",
+        email: "khushal@gmail.com",
+    });
+    ```
+- **Read (`.find()`, `.findOne()`)**  
+  - Retrieved all users using `.find()`.
+  - Retrieved a specific user using `.findOne({ username: "Mahakssss" })`.
+
+- **Update (`.findOneAndUpdate()`)**  
+  - Updated a document where `name: "khushal"` and changed its `username` to `"khushal"`.
+  - `{ new: true }` ensures the updated document is returned.
+
+- **Delete (`.findOneAndDelete()`)**  
+  - Deleted a user document where `username: "Mahakssss"`.
+
+#### **4. Express.js Integration**
+- Used Express.js to handle different routes (`/create`, `/read`, `/update`, `/delete`).
+- Each route interacts with the MongoDB database through Mongoose.
+
+#### **5. MongoDB Database Management**
+- **Database is automatically created** when inserting the first document.
+- **Collections are dynamically created** when the first document is added.
+- **MongoDB is schema-less**, but Mongoose enforces schema validation.
+
+#### **6. Understanding Async/Await**
+- Used `async/await` for database operations to handle asynchronous behavior properly.
+- Example:
+  ```js
+  let users = await userModel.find();
+  res.send(users);
+  ```
+
+#### **7. Running the Server**
+- Used `app.listen(3000);` to start the Express.js server on port `3000`.
+
+---
+
+These are the core learnings from working with **MongoDB**, **Mongoose**, and **Database Management** in this project. 🚀
