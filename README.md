@@ -135,11 +135,11 @@ app.use((req, res) => {
 
 
 
-
+<footer>------------------------------------------------------------</footer>
 
 
 #usermodel.js
-
+```
 const mongoose = require('mongoose')
 
 const mongoPort = "127.0.0.1:27017"
@@ -154,13 +154,14 @@ const userSchema = mongoose.Schema({
 })
 
 module.exports = mongoose.model("user",userSchema)
+```
 
 
+<footer>--------------------------------</footer>
+.
+# app.js
 
-
-
-#app.js
-
+````
 const express = require("express");
 const userModel = require("./usermodel");
 
@@ -201,7 +202,7 @@ app.get('/delete',async(req,res)=>{
 })
 
 app.listen(3000);
-
+````
 
 
 
